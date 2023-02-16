@@ -1,7 +1,7 @@
 clearvars
 clc
 
-fn = 'WL_1_well E05.tif';
+fn = '../data/WL_1_well E05.tif';
 
 imgData = imfinfo(fn);
 nFrames = numel(imgData);
@@ -14,7 +14,7 @@ vid = VideoWriter('test.avi');
 vid.FrameRate = 5;
 open(vid);
 
-for iT = 1:5
+for iT = 1:nFrames
 
     I = imread(fn, iT);
     mask = dogfilter(I);
@@ -31,13 +31,13 @@ for iT = 1:5
         Idbl = double(I);
         Idbl = (Idbl - min(Idbl(:)))/(max(Idbl(:)) - min(Idbl(:)));
 
-        I = insertShape(Idbl, 'filled-circle', [ct.Centroid(end, :), 2]);
+        I = insertShape(Idbl, 'FilledCircle', [ct.Centroid(end, :), 2]);
         
     end
     writeVideo(vid, Idbl); 
     
 end
 
-
-
 close(vid)
+
+save('testoutput.mat', 'tracker')
